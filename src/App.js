@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import axios from 'axios';
+import ReactJson from 'react-json-view';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [blockData, setBlockData] = useState(null);
+    const [blockNumber, setBlockNumber] = useState('');
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`http://3.120.158.50:5000/block/${blockNumber}`);
+            setBlockData(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    return (
+        <div>
+            <h1>Beacon Block Explorer</h1>
+            <input
+                type="text"
+                value={blockNumber}
+                onChange={(e) => setBlockNumber(e.target.value)}
+                placeholder="Enter Block Number"
+            />
+            <button onClick={fetchData}>Fetch Block Data</button>
+
+            {blockData && (
+                <ReactJson src={blockData} collapsed={true} />
+            )}
+        </div>
+    );
+};
 
 export default App;
