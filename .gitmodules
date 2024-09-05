@@ -1,0 +1,3 @@
+[submodule "beacon-explorer"]
+  path = beacon-explorer
+  url = https://github.com/username/beacon-explorer.git
